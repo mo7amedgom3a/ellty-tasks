@@ -1,0 +1,53 @@
+require('dotenv').config();
+const app = require('./app');
+const { pool } = require('./data/db');
+
+const PORT = process.env.PORT || 3000;
+
+/**
+ * Start the server
+ */
+const startServer = async () => {
+  try {
+    // Test database connection
+    console.log('🔍 Testing database connection...');
+    await pool.query('SELECT NOW()');
+    console.log('✅ Database connection successful');
+
+    // Start server
+    app.listen(PORT, () => {
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`🌐 API URL: http://localhost:${PORT}/api`);
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log('\n📚 Available endpoints:');
+      console.log(`   Health Check: http://localhost:${PORT}/api/health`);
+      console.log(`   Auth:         http://localhost:${PORT}/api/auth`);
+      console.log(`   Users:        http://localhost:${PORT}/api/users`);
+      console.log(`   Calculations: http://localhost:${PORT}/api/calculations`);
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+};
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err) => {
+  console.error('❌ Unhandled Promise Rejection:', err);
+  process.exit(1);
+});
+
+// Handle SIGTERM
+process.on('SIGTERM', () => {
+  console.log('👋 SIGTERM received, shutting down gracefully...');
+  pool.end(() => {
+    console.log('✅ Database pool closed');
+    process.exit(0);
+  });
+});
+
+// Start the server
+startServer();

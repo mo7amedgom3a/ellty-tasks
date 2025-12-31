@@ -1,0 +1,5 @@
+# Docker PostgreSQL data
+postgres-data/
+
+# Docker volumes
+*.log

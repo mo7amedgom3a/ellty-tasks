@@ -12,9 +12,10 @@ interface NodeTreeProps {
   parentValue?: number;
   onAddReply: (parentId: string, operation: OperationType, inputValue: number) => void;
   isRoot?: boolean;
+  canReply?: boolean;
 }
 
-export const NodeTree = ({ node, parentValue, onAddReply, isRoot = false }: NodeTreeProps) => {
+export const NodeTree = ({ node, parentValue, onAddReply, isRoot = false, canReply = true }: NodeTreeProps) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const isChildNode = parentValue !== undefined;
 
@@ -42,9 +43,6 @@ export const NodeTree = ({ node, parentValue, onAddReply, isRoot = false }: Node
               <span className="text-muted-foreground text-sm ml-2">{formattedDate}</span>
             </div>
           </div>
-          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-            <MoreHorizontal className="w-5 h-5" />
-          </Button>
         </div>
 
         {/* Math Display */}
@@ -79,6 +77,7 @@ export const NodeTree = ({ node, parentValue, onAddReply, isRoot = false }: Node
             size="sm"
             onClick={() => setShowReplyForm(!showReplyForm)}
             className="text-muted-foreground hover:text-foreground"
+            disabled={!canReply}
           >
             <MessageSquare className="w-4 h-4 mr-2" />
             Reply
@@ -86,7 +85,7 @@ export const NodeTree = ({ node, parentValue, onAddReply, isRoot = false }: Node
         </div>
 
         {/* Reply Form */}
-        {showReplyForm && (
+        {showReplyForm && canReply && (
           <ReplyForm
             parentValue={node.calculatedValue}
             onSubmit={handleReply}
@@ -104,6 +103,7 @@ export const NodeTree = ({ node, parentValue, onAddReply, isRoot = false }: Node
               node={child}
               parentValue={node.calculatedValue}
               onAddReply={onAddReply}
+              canReply={canReply}
             />
           ))}
         </div>

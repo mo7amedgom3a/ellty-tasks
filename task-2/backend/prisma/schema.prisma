@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  admin
+}
+
+enum OperationType {
+  START
+  ADD
+  SUB
+  MUL
+  DIV
+}
+
+model User {
+  id            String   @id @default(uuid()) @db.Uuid
+  username      String   @unique @db.VarChar(50)
+  password_hash String   @db.Text
+  avatar_url    String?  @db.Text
+  role          Role     @default(user)
+  created_at    DateTime @default(now()) @db.Timestamp(6)
+
+  // Relations
+  calculation_nodes CalculationNode[]
+
+  @@map("users")
+}
+
+model CalculationNode {
+  id               String        @id @default(uuid()) @db.Uuid
+  root_id          String?       @db.Uuid
+  parent_id        String?       @db.Uuid
+  operation        OperationType
+  input_value      Float         @db.DoublePrecision
+  calculated_value Float         @db.DoublePrecision
+  user_id          String        @db.Uuid
+  created_at       DateTime      @default(now()) @db.Timestamp(6)
+
+  // Relations
+  user   User              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  parent CalculationNode?  @relation("CalculationTree", fields: [parent_id], references: [id], onDelete: Cascade)
+  root   CalculationNode?  @relation("CalculationRoot", fields: [root_id], references: [id], onDelete: Cascade)
+  
+  // Self-relations
+  children      CalculationNode[] @relation("CalculationTree")
+  rootedNodes   CalculationNode[] @relation("CalculationRoot")
+
+  @@index([root_id], map: "idx_calculation_nodes_root_id")
+  @@index([parent_id], map: "idx_calculation_nodes_parent_id")
+  @@index([user_id], map: "idx_calculation_nodes_user_id")
+  @@map("calculation_nodes")
+}

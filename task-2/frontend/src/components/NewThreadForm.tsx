@@ -6,9 +6,10 @@ import { Plus } from 'lucide-react';
 
 interface NewThreadFormProps {
   onSubmit: (value: number) => void;
+  disabled?: boolean;
 }
 
-export const NewThreadForm = ({ onSubmit }: NewThreadFormProps) => {
+export const NewThreadForm = ({ onSubmit, disabled = false }: NewThreadFormProps) => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -28,10 +29,11 @@ export const NewThreadForm = ({ onSubmit }: NewThreadFormProps) => {
           step="any"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Start a new calculation thread with any number..."
+          placeholder={disabled ? "Login to start a calculation..." : "Start a new calculation thread with any number..."}
           className="flex-1 font-mono text-lg bg-secondary border-border placeholder:text-muted-foreground"
+          disabled={disabled}
         />
-        <Button type="submit" disabled={!inputValue}>
+        <Button type="submit" disabled={!inputValue || disabled}>
           <Plus className="w-4 h-4 mr-2" />
           Post thread
         </Button>
