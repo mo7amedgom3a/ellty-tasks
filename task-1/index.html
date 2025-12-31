@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Selector Modal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="modal-container">
+        
+        <ul class="page-list">
+            <li class="list-row" onclick="toggleCheckbox('all-pages')">
+                <span class="row-label">All pages</span>
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="all-pages">
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+
+            <div class="list-divider"></div>
+
+            <li class="list-row" onclick="toggleCheckbox('page-1')">
+                <span class="row-label">Page 1</span>
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="single-page" id="page-1">
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+
+            <li class="list-row" onclick="toggleCheckbox('page-2')">
+                <span class="row-label">Page 2</span>
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="single-page" id="page-2">
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+
+            <li class="list-row" onclick="toggleCheckbox('page-3')">
+                <span class="row-label">Page 3</span>
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="single-page" id="page-3">
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+
+            <li class="list-row" onclick="toggleCheckbox('page-4')">
+                <span class="row-label">Page 4</span>
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="single-page" id="page-4">
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+        </ul>
+
+        <button class="btn-done" onclick="alert('Selection Saved!')">Done</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
